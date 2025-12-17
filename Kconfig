@@ -1,0 +1,2 @@
+# Root Kconfig for UM-S3D-learning project
+source "main/Kconfig.projbuild"

@@ -1,0 +1,6 @@
+CONFIG_BLINK_LED_STRIP=y
+#
+# RGB Data pin for ProS3 and TinyS3 is 18
+# RGB Data pin for FeatherS3 is 40
+#
+CONFIG_BLINK_GPIO=18
