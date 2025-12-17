@@ -1,22 +1,38 @@
-| Supported Targets | ESP32 | ESP32-C2 | ESP32-C3 | ESP32-C5 | ESP32-C6 | ESP32-C61 | ESP32-H2 | ESP32-H21 | ESP32-P4 | ESP32-S2 | ESP32-S3 |
-| ----------------- | ----- | -------- | -------- | -------- | -------- | --------- | -------- | --------- | -------- | -------- | -------- |
+# UMSeriesD ESP-IDF Wrapper for Unexpected Maker Series[D] Boards
 
-# Blink Example
+**Supported Boards:**
+- EdgeS3[D]
+- TinyS3[D]
+- FeatherS3[D]
+- ProS3[D]
 
-(See the README.md file in the upper level 'examples' directory for more information about examples.)
 
-This example demonstrates how to blink a LED by using the GPIO driver or using the [led_strip](https://components.espressif.com/component/espressif/led_strip) library if the LED is addressable e.g. [WS2812](https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf). The `led_strip` library is installed via [component manager](main/idf_component.yml).
+This project ports the original Unexpected Maker Series D Arduino Helper library to ESP-IDF, providing a C++ wrapper for board features. The included demonstration focuses on blinking the built-in RGB and blue LEDs on supported boards, as well as external GPIO LEDs. Addressable LEDs (e.g., WS2812) are supported via the [led_strip](https://components.espressif.com/component/espressif/led_strip) library, installed through the [component manager](main/idf_component.yml).
+
+## Project Structure
+
+- main/blink_example_main.cpp — Main demonstration application for blinking built-in and external LEDs.
+- main/UMSeriesD.h / UMSeriesD.cpp — C++ wrapper class for UM Series[D] board features.
+- main/UMSeriesD_idf.h / UMSeriesD_idf.c — ESP-IDF C helper functions for board hardware (called by the wrapper).
+- main/Kconfig.projbuild — Project-specific configuration options for board features and LED selection.
+- main/idf_component.yml — ESP-IDF component manager dependencies (e.g., led_strip).
+- Kconfig — Root Kconfig file, includes project configuration.
+- CMakeLists.txt / main/CMakeLists.txt — Build system configuration.
 
 ## How to Use Example
 
-Before project configuration and build, be sure to set the correct chip target using `idf.py set-target <chip_name>`.
+Before project configuration and build, ensure the target is set to ESP32-S3 using:
+
+    idf.py set-target esp32s3
 
 ### Hardware Required
 
-* A development board with normal LED or addressable LED on-board (e.g., ESP32-S3-DevKitC, ESP32-C6-DevKitC etc.)
-* A USB cable for Power supply and programming
+* An Unexpected Maker Series D board (EdgeS3[D], TinyS3[D], FeatherS3[D], or ProS3[D])
+  * TinyS3[D], FeatherS3[D], and ProS3[D] have built-in addressable RGB LEDs (WS2812) and/or blue LEDs
+  * EdgeS3[D] can be demonstrated with an external LED connected to a GPIO pin
+* A USB cable for power supply and programming
 
-See [Development Boards](https://www.espressif.com/en/products/devkits) for more information about it.
+See the [Unexpected Maker Series D boards](https://unexpectedmaker.com/shop.html#!/Series-D/c/183424520) for more information.
 
 ### Configure the Project
 
@@ -67,3 +83,4 @@ The pixel number indicates the pixel position in the LED strip. For a single LED
 * If the LED isn't blinking, check the GPIO or the LED type selection in the `Example Configuration` menu.
 
 For any technical queries, please open an [issue](https://github.com/espressif/esp-idf/issues) on GitHub. We will get back to you soon.
+
