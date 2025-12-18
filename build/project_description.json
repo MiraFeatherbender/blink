@@ -1,7 +1,7 @@
 {
     "version":            "1.2",
     "project_name":       "ESP-IDF",
-    "project_version":    "691e98e-dirty",
+    "project_version":    "e14a29f-dirty",
     "project_path":       "C:/Users/jonat/UM-Dseries-menuconfig/Unexpected_Maker_Series_D_ESP-IDF_Wrapper",
     "idf_path":           "C:/Users/jonat/esp/v5.5.1/esp-idf",
     "build_dir":          "C:/Users/jonat/UM-Dseries-menuconfig/Unexpected_Maker_Series_D_ESP-IDF_Wrapper/build",
