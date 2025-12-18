@@ -79,7 +79,7 @@ Note: The color order could be different according to the LED model.
 
 ## Troubleshooting
 
-* If the LED isn't blinking, check the GPIO or the LED type selection in the `Example Configuration` menu.
+* If the LED isn't blinking, check the GPIO or the LED type selection in the `UM Series[D] Board Configuration` menu.
 * If using a D series board other than ProS3D, double check the pin numbers in [Kconfig.projbuild](main/Kconfig.projbuild) against your pinout card.
 * Ensure you have selected the correct board type in menuconfig.
 * Make sure your board is properly powered and the USB cable is securely connected.
