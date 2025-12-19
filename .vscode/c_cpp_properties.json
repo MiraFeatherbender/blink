@@ -8,14 +8,12 @@
       ],
       "includePath": [
         "${config:idf.espIdfPathWin}/components/**",
-        "${workspaceFolder}/**",
-        "C:/Users/jonat/esp/v5.5.1/esp-idf/components/driver/i2c/include/**"
+        "${workspaceFolder}/**"
       ],
       "browse": {
         "path": [
           "${config:idf.espIdfPathWin}/components",
-          "${workspaceFolder}",
-          "C:/Users/jonat/esp/v5.5.1/esp-idf/components/driver/i2c/include"
+          "${workspaceFolder}"
         ],
         "limitSymbolsToIncludedHeaders": true
       }
