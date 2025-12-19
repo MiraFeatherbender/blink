@@ -15,3 +15,5 @@ void UMSeriesD::toggleBlueLED() { ums3_toggle_blue_led(); }
 float UMSeriesD::getBatteryVoltage() { return ums3_get_battery_voltage(); }
 bool UMSeriesD::getVbusPresent() { return ums3_get_vbus_present(); }
 void UMSeriesD::setAntennaExternal(bool state) { ums3_set_antenna_external(state); }
+void UMSeriesD::fgSetup() { ums3_fg_setup(); }
+uint8_t UMSeriesD::fgVersion() { return ums3_fg_version(); }

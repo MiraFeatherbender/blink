@@ -51,4 +51,10 @@ public:
 
     // Set the RF Switch to external antenna
     void setAntennaExternal(bool state);
+    
+    // Setup the fuel gauge (I2C for MAX17048)
+    void fgSetup();
+
+    // Get the MAX17048 fuel gauge version
+    uint8_t fgVersion();
 };

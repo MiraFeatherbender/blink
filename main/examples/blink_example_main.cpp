@@ -76,6 +76,7 @@ static void configure_led(void)
 extern "C" void app_main(void)
 {
     ums3.begin();
+
     configure_led();
 
     while (1) {
