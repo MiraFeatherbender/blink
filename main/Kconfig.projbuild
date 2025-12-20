@@ -61,6 +61,9 @@ menu "UM Series[D] Board Configuration"
             config EXAMPLE_COLORWHEEL
                 bool "Color Wheel Example"
                 depends on UM_BOARD_PROS3 || UM_BOARD_FEATHERS3 || UM_BOARD_TINYS3
+            config EXAMPLE_BATTERY_CHECK
+                bool "Battery Check Example"
+                depends on UM_BOARD_PROS3 || UM_BOARD_FEATHERS3 || UM_BOARD_TINYS3
             config EXAMPLE_BLINK
                 bool "Blink Example"
         endchoice

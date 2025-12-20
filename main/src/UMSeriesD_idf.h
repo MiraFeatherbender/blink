@@ -44,7 +44,7 @@ void ums3_toggle_blue_led(void);
 
 // Sensor and utility
 float ums3_get_light_sensor_voltage(void);
-void ums3_fg_setup(void);
+void ums3_fg_setup(void); // TODO: Update for new I2C driver **done**
 float ums3_get_battery_voltage(void);
 uint8_t ums3_fg_version(void);
 void ums3_set_antenna_external(bool state);
@@ -55,9 +55,9 @@ uint32_t ums3_color(uint8_t r, uint8_t g, uint8_t b);
 uint32_t ums3_color_wheel(uint8_t pos);
 
 // MAX17048 I2C helpers
-void ums3_i2c_write_reg(max17048_reg_t reg);
-void ums3_i2c_write_reg16(max17048_reg_t reg, uint16_t data);
-uint16_t ums3_i2c_read_reg16(max17048_reg_t reg);
+void ums3_i2c_write_reg(max17048_reg_t reg);    // TODO: Update for new I2C driver
+void ums3_i2c_write_reg16(max17048_reg_t reg, uint16_t data); // TODO: Update for new I2C driver
+uint16_t ums3_i2c_read_reg16(max17048_reg_t reg); // TODO: Update for new I2C driver
 
 #ifdef __cplusplus
 }

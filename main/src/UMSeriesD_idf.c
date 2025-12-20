@@ -7,7 +7,7 @@
 #include "UMSeriesD_idf.h"
 #include <stdio.h>
 #include "driver/gpio.h"
-#include "driver/i2c.h"
+#include "driver/i2c_master.h"
 #include "led_strip.h"
 #include "esp_adc/adc_oneshot.h"
 #include "esp_log.h"
@@ -34,6 +34,8 @@
 #endif
 
 #define MAX17048_I2C_ADDR 0x36
+
+static i2c_master_dev_handle_t max17048_dev_handle = NULL;
 
 // -------- LED Strip Handle (if RGB present) --------
 #if defined(HAS_RGB)
@@ -221,17 +223,46 @@ float ums3_get_light_sensor_voltage(void) {
 // -------- Fuel Gauge Setup --------
 void ums3_fg_setup(void) {
     // I2C for battery gauge (MAX17048)
-    i2c_config_t i2c_conf = {
-        .mode = I2C_MODE_MASTER,
-        .sda_io_num = CONFIG_UM_I2C_SDA_PIN,
+    // // TODO: Migrate the following to new driver/i2c_master.h API
+    // i2c_config_t i2c_conf = {
+    //     .mode = I2C_MODE_MASTER,
+    //     .sda_io_num = CONFIG_UM_I2C_SDA_PIN,
+    //     .scl_io_num = CONFIG_UM_I2C_SCL_PIN,
+    //     .sda_pullup_en = GPIO_PULLUP_ENABLE,
+    //     .scl_pullup_en = GPIO_PULLUP_ENABLE,
+    //     .master.clk_speed = 400000
+    // };
+    // i2c_param_config(I2C_NUM_0, &i2c_conf); // <-- OLD I2C DRIVER USAGE
+    // i2c_driver_install(I2C_NUM_0, I2C_MODE_MASTER, 0, 0, 0); // <-- OLD I2C DRIVER USAGE
+    // // (No gating needed, always available if I2C is present)
+
+    // --- New I2C driver (driver/i2c_master.h) structure to fill in ---
+    i2c_master_bus_config_t bus_config = {
+        .i2c_port   = I2C_NUM_0,
         .scl_io_num = CONFIG_UM_I2C_SCL_PIN,
-        .sda_pullup_en = GPIO_PULLUP_ENABLE,
-        .scl_pullup_en = GPIO_PULLUP_ENABLE,
-        .master.clk_speed = 400000
+        .sda_io_num = CONFIG_UM_I2C_SDA_PIN,
+        .clk_source = I2C_CLK_SRC_DEFAULT,
+        .glitch_ignore_cnt = 7,
+        .flags.enable_internal_pullup = true
     };
-    i2c_param_config(I2C_NUM_0, &i2c_conf);
-    i2c_driver_install(I2C_NUM_0, I2C_MODE_MASTER, 0, 0, 0);
+    i2c_master_bus_handle_t bus_handle = NULL;
+    esp_err_t err = i2c_new_master_bus(&bus_config, &bus_handle);
+    // Use bus_handle for all I2C operations
     // (No gating needed, always available if I2C is present)
+    if (err != ESP_OK) {
+        ESP_LOGE("UMSeriesD", "I2C bus initialization failed: %d", err);
+    }
+
+    i2c_device_config_t dev_config = {
+        .dev_addr_length = I2C_ADDR_BIT_LEN_7,
+        .device_address = MAX17048_I2C_ADDR, // 0x36
+        .scl_speed_hz = 400000,              // 400kHz
+    };
+
+    err = i2c_master_bus_add_device(bus_handle, &dev_config, &max17048_dev_handle);
+    if (err != ESP_OK) {
+        ESP_LOGE("UMSeriesD", "I2C device initialization failed: %d", err);
+    }
 }
 
 // -------- Battery Voltage --------
@@ -283,8 +314,9 @@ uint32_t ums3_color_wheel(uint8_t pos) {
 // -------- MAX17048 I2C Helpers --------
 void ums3_i2c_write_reg(max17048_reg_t reg) {
     uint8_t reg_addr = (uint8_t)reg;
-    esp_err_t err = i2c_master_write_to_device(
-        I2C_NUM_0, MAX17048_I2C_ADDR, &reg_addr, 1, 100 / portTICK_PERIOD_MS);
+    // TODO: Migrate i2c_master_write_to_device to new driver/i2c_master.h API
+    esp_err_t err = i2c_master_transmit(
+        max17048_dev_handle, &reg_addr, 1, 100 / portTICK_PERIOD_MS); // <-- OLD I2C DRIVER USAGE
     if (err != ESP_OK) {
         ESP_LOGE("UMSeriesD", "I2C write_reg failed: %d", err);
     }
@@ -295,8 +327,9 @@ void ums3_i2c_write_reg16(max17048_reg_t reg, uint16_t data) {
     buf[0] = (uint8_t)reg;
     buf[1] = (data & 0xFF00) >> 8;
     buf[2] = (data & 0x00FF);
-    esp_err_t err = i2c_master_write_to_device(
-        I2C_NUM_0, MAX17048_I2C_ADDR, buf, 3, 100 / portTICK_PERIOD_MS);
+    // TODO: Migrate i2c_master_write_to_device to new driver/i2c_master.h API
+    esp_err_t err = i2c_master_transmit(
+        max17048_dev_handle, buf, 3, 100 / portTICK_PERIOD_MS); // <-- OLD I2C DRIVER USAGE
     if (err != ESP_OK) {
         ESP_LOGE("UMSeriesD", "I2C write_reg16 failed: %d", err);
     }
@@ -305,8 +338,9 @@ void ums3_i2c_write_reg16(max17048_reg_t reg, uint16_t data) {
 uint16_t ums3_i2c_read_reg16(max17048_reg_t reg) {
     uint8_t reg_addr = (uint8_t)reg;
     uint8_t data[2] = {0};
-    esp_err_t err = i2c_master_write_read_device(
-        I2C_NUM_0, MAX17048_I2C_ADDR, &reg_addr, 1, data, 2, 100 / portTICK_PERIOD_MS);
+    // TODO: Migrate i2c_master_write_read_device to new driver/i2c_master.h API
+    esp_err_t err = i2c_master_transmit_receive(
+        max17048_dev_handle, &reg_addr, 1, data, 2, 100 / portTICK_PERIOD_MS); // <-- OLD I2C DRIVER USAGE
     if (err != ESP_OK) {
         ESP_LOGE("UMSeriesD", "I2C read_reg16 failed: %d", err);
         return 0;
