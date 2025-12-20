@@ -18,7 +18,7 @@ This project ports the original [Unexpected Maker Series D Arduino Helper librar
 │   │   ├── blink_example_main.cpp   # Example: Blinking built-in, blue, and external LEDs
 │   │   └── colorwheel.cpp           # Example: Cycling RGB LED through color wheel
 │   ├── src/
-│   │   ├── UMSeriesD.h              # C++ wrapper class header
+│   │   ├── UMSeriesD.hpp            # C++ wrapper class header
 │   │   ├── UMSeriesD.cpp            # C++ wrapper class implementation
 │   │   ├── UMSeriesD_idf.h          # ESP-IDF C helper header
 │   │   └── UMSeriesD_idf.c          # ESP-IDF C helper implementation
