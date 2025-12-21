@@ -15,6 +15,7 @@ This project ports the original [Unexpected Maker Series D Arduino Helper librar
 .
 ├── main/
 │   ├── examples/
+│   │   ├── battery_check.cpp        # Example: Battery voltage check and RGB LED status indication
 │   │   ├── blink_example_main.cpp   # Example: Blinking built-in, blue, and external LEDs
 │   │   └── colorwheel.cpp           # Example: Cycling RGB LED through color wheel
 │   ├── src/
@@ -55,6 +56,7 @@ In the "UM Series[D] Board Configuration" menu:
 * **Select the example to build** in the "Example Selection" menu:
   * **Color Wheel Example** — Cycles the built-in RGB LED through the color wheel (TinyS3[D], FeatherS3[D], ProS3[D])
   * **Blink Example** — Blinks the RGB, blue, or external LED (all boards)
+  * **Battery Check Example** — Reads battery voltage and sets RGB LED color/status (boards with MAX17048 fuel gauge)
 * If you select the **Blink Example**, additional options will appear:
   * **Blink LED type** — Choose the LED type:
     * **GPIO** for an external LED (EdgeS3[D] or any board with a manual LED on a GPIO pin)
