@@ -4,7 +4,10 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
+#define BATTERY_CHECK_INTERVAL_MS 3000
 static const char *TAG = "battery_check";
+
+void checkBattery(UMSeriesD& batteryChecker); // Prototype
 
 extern "C" void app_main(void){
 
@@ -22,6 +25,32 @@ extern "C" void app_main(void){
     ESP_LOGI(TAG, "MAX17048 version: %d\n", batteryChecker.fgVersion());
 
     while(1){
-        vTaskDelay(100 / portTICK_PERIOD_MS); // 100ms delay
+        checkBattery(batteryChecker);
+        vTaskDelay(BATTERY_CHECK_INTERVAL_MS / portTICK_PERIOD_MS);
+    }
+}
+
+void checkBattery(UMSeriesD& batteryChecker){
+    float voltage = batteryChecker.getBatteryVoltage();
+
+    if(batteryChecker.getVbusPresent())
+    {
+        if(voltage < 4.0){
+            batteryChecker.setPixelColor(0x0000FF); // Blue for charging
+        } else {
+            batteryChecker.setPixelColor(0xFF00FF); // Purple for full
+        }
+        ESP_LOGI(TAG, "Running from VBUS - Battery: %.2f V", voltage);
+    } 
+    else 
+    {
+        if(voltage >= 3.6){
+            batteryChecker.setPixelColor(0x00FF00); // Green for high
+        } else if(voltage >= 3.3){
+            batteryChecker.setPixelColor(0xFF8800); // Orange for medium
+        } else {
+            batteryChecker.setPixelColor(0xFF0000); // Red for low
+        }
+        ESP_LOGI(TAG, "Running from Battery: %.2f V", voltage);
     }
 }
