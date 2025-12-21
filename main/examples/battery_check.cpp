@@ -38,7 +38,7 @@ void checkBattery(UMSeriesD& batteryChecker){
         if(voltage < 4.0){
             batteryChecker.setPixelColor(0x0000FF); // Blue for charging
         } else {
-            batteryChecker.setPixelColor(0xFF00FF); // Purple for full
+            batteryChecker.setPixelColor(0x000000); // Off for full
         }
         ESP_LOGI(TAG, "Running from VBUS - Battery: %.2f V", voltage);
     } 
