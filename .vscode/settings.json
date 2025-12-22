@@ -16,5 +16,6 @@
     "--compile-commands-dir=c:\\Users\\jonat\\UM-Dseries-menuconfig\\blink\\build"
   ],
   "idf.portWin": "COM14",
-  "idf.flashType": "UART"
+  "idf.flashType": "UART",
+  "workbench.colorCustomizations": {}
 }
